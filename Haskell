@@ -1,0 +1,35 @@
+import System.Random (randomRIO)
+
+main :: IO ()
+main = do
+  putStrLn "¡Bienvenido al juego de adivinanza de números!"
+  numero <- randomRIO (1, 100) -- genera un número aleatorio entre 1 y 100
+  jugar numero 10
+
+jugar :: Int -> Int -> IO ()
+jugar numero intentos = do
+  putStr "Ingresa un número entre 1 y 100: "
+  input <- getLine
+  let guess = read input :: Int
+  if guess == numero
+    then do
+      putStrLn "¡Felicitaciones, has adivinado el número!"
+    else if guess < numero
+      then do
+        putStrLn "El número es más grande."
+        if intentos == 1
+          then do
+            putStrLn "Lo siento, has agotado tus intentos. El número era:"
+            putStrLn (show numero)
+          else do
+            putStrLn ("Te quedan " ++ show (intentos - 1) ++ " intentos.")
+            jugar numero (intentos - 1)
+      else do
+        putStrLn "El número es más pequeño."
+        if intentos == 1
+          then do
+            putStrLn "Lo siento, has agotado tus intentos. El número era:"
+            putStrLn (show numero)
+          else do
+            putStrLn ("Te quedan " ++ show (intentos - 1) ++ " intentos.")
+            jugar numero (intentos - 1)
